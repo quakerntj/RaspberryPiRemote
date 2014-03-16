@@ -39,7 +39,7 @@ public:
         if (pkg->type == REMOTE_EVENT_OPEN_DOOR) {
             RemoteOpenDoorEvent const * event = reinterpret_cast<RemoteOpenDoorEvent const*>(pkg);
             for (int i = 0; i < 256; i++) {
-                if (!event->key[i] != mKey[i])
+                if (event->key[i] != mKey[i])
                     goto wrongKey;
             }
             // open door;
@@ -80,6 +80,14 @@ int main(int argc, char** argv) {
                 return -8;
             }
         }
+        if (!strcmp(ptr, "-i")) {
+            if (++i < argc) {
+                ip = argv[i];
+                continue;
+            } else {
+                return -8;
+            }
+        }
         if (!strcmp(ptr, "-k")) {
             if (++i < argc) {
                 char * keyFile = argv[i];
@@ -109,7 +117,7 @@ int main(int argc, char** argv) {
                 cmd, doorkey, port);
             return 0;
         }
-        fprintf(stderr, "Unknown Command\n");
+        fprintf(stderr, "Unknown command\n");
         return -8;
     }
     if (key[0] == 0) {
